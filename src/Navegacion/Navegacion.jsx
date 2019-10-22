@@ -8,10 +8,10 @@ class Navegacion extends Component{
             <div className="nav bg-light  justify-content-around navegacion">
             <ul className="nav">
                 <li className="nav-item">
-                <Link to='/' className="nav-link text-dark">Home</Link>
+                    <Link to='/' className="nav-link text-dark">Home</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link text-dark" href="#">Productos</a>
+                    <Link to='/producto/registrar' className="nav-link text-dark">Productos</Link>
                 </li>
                 <li className="nav-item">
                     <a className="nav-link text-dark" href="#">Pedidos</a>

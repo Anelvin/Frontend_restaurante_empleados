@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
 import Navegacion from '../Navegacion/Navegacion.jsx';
-import './Registro.scss';
+import './RegistroUsuario.scss';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 
-class Registro extends Component{
+class RegistroUsuario extends Component{
     
     constructor(props){
         super(props);
@@ -82,4 +82,4 @@ const mapStateToProps=state=>{
     }
 }
 
-export default connect(mapStateToProps)(Registro);
+export default connect(mapStateToProps)(RegistroUsuario);
