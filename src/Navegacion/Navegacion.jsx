@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Navegacion extends Component{
 
@@ -11,10 +12,16 @@ class Navegacion extends Component{
                     <Link to='/' className="nav-link text-dark">Home</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/producto/registrar' className="nav-link text-dark">Productos</Link>
+                    <Link to={this.props.dListadoProductos} className="nav-link text-dark">Productos</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link text-dark" href="#">Pedidos</a>
+                    <Link to={this.props.dListadoCategorias} className="nav-link text-dark">Categorías</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to='/proveedor' className="nav-link text-dark">Proveedores</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to='' className="nav-link text-dark">Pedidos</Link>
                 </li>
             </ul>
             <ul className="nav">
@@ -27,4 +34,11 @@ class Navegacion extends Component{
     }
 }
 
-export default Navegacion;
+const mapStateToProps=state=>{
+    return {
+        dListadoProductos: state.dListadoProductos,
+        dListadoCategorias: state.dListadoCategorias
+    }
+}
+
+export default connect(mapStateToProps)(Navegacion);

@@ -1,0 +1,16 @@
+.listadoProveedores{
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/restaurantes-7f37d.appspot.com/o/imagenFondo%2Ffondo-login.jpg?alt=media');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    width:100vw;
+    height: 100vh;
+}
+.imagenProducto{
+    width:3vw;
+}
+.contenedorTabla{
+    height:40vh;
+    overflow: auto;
+}

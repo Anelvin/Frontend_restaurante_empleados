@@ -24,7 +24,8 @@ class RegistroProducto extends Component{
         super(props);
         this.state={
             uploadValue:0,
-            categorias:null
+            categorias:null,
+            proveedores:null
         }
     }
 
@@ -36,12 +37,36 @@ class RegistroProducto extends Component{
             })
         })
         .catch(error=>console.log(error));
+        Axios.get(this.props.proveedores)
+        .then(resultado=>{
+            this.setState({
+                proveedores:resultado.data
+            })
+        })
+        .catch(error=>console.log(error));
     }
     handleChange=(event)=>{
       
     }
     handleChangeFile=(event)=>{
-        console.log(event.target.files[0].name);
+        const file=event.target.files[0];
+        const storageRef=firebase.storage().ref(`imagenProductos/${file.name}`);
+        const task=storageRef.put(file);
+
+        task.on('state_changed',(snapshot)=>{
+            let porcentaje=(snapshot.bytesTransferred/snapshot.totalBytes)*100
+            this.setState({
+                uploadValue:porcentaje
+            })
+        },(error)=>{
+            this.setState({
+                mensaje:'Ha ocurrido un error',
+            })
+        },()=>{
+            this.setState({
+                mensaje:'Archivo subido',
+            })
+        })
     }
     handleSubmit=(event)=>{
         event.preventDefault();
@@ -50,10 +75,14 @@ class RegistroProducto extends Component{
             categoria:event.target.categoria.value,
             descripcion:event.target.descripcion.value,
             stock:event.target.stock.value,
-            imagen:event.target.imagen.files[0].name,
+            imagenURL:event.target.imagen.files[0].name,
             proveedor:event.target.proveedor.value
         }
-        console.log(datos);
+        Axios.post(this.props.registrarProducto,datos)
+        .then(resultado=>{
+            this.props.history.push('/producto');
+        })
+        .catch(error=>console.log(error));
     }
     render(){
         return(
@@ -95,10 +124,18 @@ class RegistroProducto extends Component{
                                         <input type="file" onChange={this.handleChangeFile} name="imagen" className="btn btn-link"/>
                                     </div>
                                         <progress value={this.state.uploadValue} max='100'></progress>
+                                        {this.state.mensaje}
                                     <div className="form-group">
                                         <label>Proveedor</label>
                                         <select className="form-control" name="proveedor" onChange={this.handleChange}>
                                         <option value="">Seleccione proveedor...</option>
+                                        {this.state.proveedores==null ? null :
+                                        this.state.proveedores.map(proveedor=>{
+                                            return (
+                                                <option value={proveedor.nombre} key={proveedor._id}>{proveedor.nombre}</option>
+                                            );
+                                        })
+                                        }
                                         </select>
                                     </div>
                                     <button type="submit" className="btn btn-primary">Registrarse</button>
@@ -114,7 +151,9 @@ class RegistroProducto extends Component{
 
 const mapStateToProps=state=>{
     return {
-        categorias:state.buscarCategorias
+        categorias:state.buscarCategorias,
+        proveedores:state.buscarProveedores,
+        registrarProducto: state.registrarProducto
     }
 }
 

@@ -45,7 +45,7 @@ class RegistroUsuario extends Component{
                         <div className="row">
                             <div className="col-8 offset-2">
                                 <form className="pt-5" onSubmit={this.handleSubmit}>
-                                <h1 className="text-center">Registro</h1>
+                                <h1 className="text-center">Registrar usuario</h1>
                                     <div className="form-group pt-5">
                                         <label>Usuario</label>
                                         <input type="text" name="nombre" onChange={this.handleChange} className="form-control" placeholder="Usuario"/>
