@@ -1,10 +1,22 @@
 import React,{Component} from 'react';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
+import { borrarToken } from '../store/action'
 
 class Navegacion extends Component{
 
+    constructor(props){
+        super(props);
+        
+    }
+
+    cerrarSesion=()=>{
+        borrarToken();
+    }
+
     render(){
+
+
         return (
             <div className="nav bg-light  justify-content-around navegacion">
             <ul className="nav">
@@ -25,9 +37,14 @@ class Navegacion extends Component{
                 </li>
             </ul>
             <ul className="nav">
+                {this.props.token ?
                 <li className="nav-item">
-                    <Link to='/registro' className="nav-link text-dark">Login</Link>
+                    <Link to='/' onClick={this.cerrarSesion} className="nav-link text-dark">Logout</Link>
+                </li>:
+                <li className="nav-item">
+                    <Link to='/login' className="nav-link text-dark">Login</Link>
                 </li>
+                }
             </ul>
         </div>
         )
@@ -37,7 +54,8 @@ class Navegacion extends Component{
 const mapStateToProps=state=>{
     return {
         dListadoProductos: state.dListadoProductos,
-        dListadoCategorias: state.dListadoCategorias
+        dListadoCategorias: state.dListadoCategorias,
+        token: state.token
     }
 }
 

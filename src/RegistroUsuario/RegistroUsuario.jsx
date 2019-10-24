@@ -3,7 +3,7 @@ import Navegacion from '../Navegacion/Navegacion.jsx';
 import './RegistroUsuario.scss';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
+import { borrarToken } from '../store/action';
 
 class RegistroUsuario extends Component{
     
@@ -13,6 +13,12 @@ class RegistroUsuario extends Component{
             nombre:'',
             cargo:'',
             password:''
+        }
+    }
+
+    componentDidMount(){
+        if(!this.props.token){
+            this.props.history.push('/login')
         }
     }
 
@@ -27,12 +33,17 @@ class RegistroUsuario extends Component{
         console.log(this.state);
         if(this.state.password===event.target.password2.value){
             axios.post(this.props.registrarUsuario, this.state)
-            .then(resultado=>console.log(resultado));
+            .then(resultado=>{
+                alert('Usuario registrado');
+            })
+            .catch(error=>{
+                borrarToken();
+                this.props.history.push('/');
+            })
         }
         else{
             console.log('No coinciden');
         }
-        //console.log(event.target.password2.value);
     }
     
     render(){
@@ -54,7 +65,7 @@ class RegistroUsuario extends Component{
                                     <label>Cargo</label>
                                         <select className="form-control" name="cargo" onChange={this.handleChange}>
                                         <option value="">Seleccione cargo...</option>
-                                        <option value="camarero">Camarero</option>
+                                        <option value="Administrador">Administrador</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
@@ -78,7 +89,8 @@ class RegistroUsuario extends Component{
 
 const mapStateToProps=state=>{
     return {
-        registrarUsuario: state.registrarUsuario
+        registrarUsuario: state.registrarUsuario,
+        token: state.token
     }
 }
 

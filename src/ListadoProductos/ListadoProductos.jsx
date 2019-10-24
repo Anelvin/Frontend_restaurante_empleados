@@ -4,6 +4,7 @@ import Navegacion from '../Navegacion/Navegacion.jsx';
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import { borrarToken } from '../store/action';
 
 class ListadoProducto extends Component{
 
@@ -15,12 +16,20 @@ class ListadoProducto extends Component{
     }
 
     componentDidMount(){
-        Axios.get(this.props.productos)
-        .then(resultado=>{
-            this.setState({
-                productos:resultado.data
+        if(!this.props.token){
+            this.props.history.push('/login');
+        }else{
+            Axios.get(this.props.productos)
+            .then(resultado=>{
+                this.setState({
+                    productos:resultado.data
+                })
             })
-        })
+            .catch(error=>{
+                borrarToken();
+                this.props.history.push('/');
+            });
+        }
     }
 
     render(){
@@ -56,7 +65,7 @@ class ListadoProducto extends Component{
                                 {this.state.productos==null ? null :
                                 this.state.productos.map(producto=>{
                                     return (
-                                        <tr>
+                                        <tr key={producto._id}>
                                             <td>{producto._id}</td>
                                             <td><img className="imagenProducto" src={`https://firebasestorage.googleapis.com/v0/b/restaurantes-7f37d.appspot.com/o/imagenProductos%2F${producto.imagenURL}?alt=media`} alt=""/></td>
                                             <td>{producto.nombre}</td>
@@ -80,7 +89,8 @@ class ListadoProducto extends Component{
 const mapStateToProps=state=>{
     return {
         productos: state.buscarProductos,
-        dRegistrarProducto: state.dRegistrarProducto
+        dRegistrarProducto: state.dRegistrarProducto,
+        token: state.token
     }
 }
 

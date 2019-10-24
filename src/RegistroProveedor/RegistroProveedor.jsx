@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import Navegacion from '../Navegacion/Navegacion.jsx';
 import { connect } from 'react-redux';
 import Axios from 'axios';
+import { borrarToken } from '../store/action';
 
 class RegistroProveedor extends Component{
 
@@ -14,6 +15,11 @@ class RegistroProveedor extends Component{
         }
     }
 
+    componentDidMount(){
+        if(!this.props.token){
+            this.props.history.push('/login')
+        }
+    }
     handleChange=(event)=>{
         this.setState({
             [event.target.name]:event.target.value
@@ -26,7 +32,10 @@ class RegistroProveedor extends Component{
         .then(resultado=>{
             this.props.history.push('/proveedor');
         })
-        .catch(error=>console.log(error));
+        .catch(error=>{
+            borrarToken();
+            this.props.history.push('/');
+        });
     }
     render(){
         return(
@@ -64,7 +73,8 @@ class RegistroProveedor extends Component{
 
 const mapStateToProps=state=>{
     return {
-        registrarProveedor: state.registrarProveedor
+        registrarProveedor: state.registrarProveedor,
+        token: state.token
     }
 }
 

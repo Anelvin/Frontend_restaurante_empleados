@@ -3,6 +3,7 @@ import Navegacion from '../Navegacion/Navegacion.jsx';
 import './RegistroCategoria.scss';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { borrarToken } from '../store/action';
 
 class RegistroCategoria extends Component{
 
@@ -20,13 +21,21 @@ class RegistroCategoria extends Component{
         })
     }
 
+    componentDidMount(){
+        if(!this.props.token){
+            this.props.history.push('/login')
+        }
+    }
     handleSubmit=(event)=>{
         event.preventDefault();
         axios.post(this.props.RegistrarCategoria,this.state)
         .then(resultado=>{
             this.props.history.push('categoria');
         })
-        .catch(error=>console.log(error));
+        .catch(error=>{
+            borrarToken();
+            this.props.history.push('/');
+        })
     }
 
     render(){
@@ -61,7 +70,8 @@ class RegistroCategoria extends Component{
 
 const mapStateToProps=state=>{
     return {
-        RegistrarCategoria: state.registrarCategoria
+        RegistrarCategoria: state.registrarCategoria,
+        token: state.token
     }
 }
 

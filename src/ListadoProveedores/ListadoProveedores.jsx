@@ -4,6 +4,7 @@ import './ListadoProveedores.scss';
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import { borrarToken } from '../store/action';
 
 class ListadoProveedores extends Component{
 
@@ -15,12 +16,20 @@ class ListadoProveedores extends Component{
     }
 
     componentDidMount(){
-        Axios.get(this.props.proveedores)
-        .then(resultado=>{
-            this.setState({
-                proveedores:resultado.data
+        if(!this.props.token){
+            this.props.history.push('/login')
+        }else{
+            Axios.get(this.props.proveedores)
+            .then(resultado=>{
+                this.setState({
+                    proveedores:resultado.data
+                })
             })
-        })
+            .catch(error=>{
+                borrarToken();
+                this.props.history.push('/');
+            });
+        }
     }
 
     render(){
@@ -76,7 +85,8 @@ class ListadoProveedores extends Component{
 const mapStateToProps=state=>{
     return {
         proveedores: state.buscarProveedores,
-        registrarProveedor: state.dRegistrarProveedor
+        registrarProveedor: state.dRegistrarProveedor,
+        token: state.token
     }
 }
 

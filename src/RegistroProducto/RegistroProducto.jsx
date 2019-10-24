@@ -3,6 +3,7 @@ import Navegacion from '../Navegacion/Navegacion.jsx';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import Axios from 'axios';
+import { borrarToken } from '../store/action';
 
 
 const firebaseConfig = {
@@ -36,17 +37,28 @@ class RegistroProducto extends Component{
                 categorias:resultado.data
             })
         })
-        .catch(error=>console.log(error));
+        .catch(error=>{
+            borrarToken();
+            this.props.history.push('/');
+        })
         Axios.get(this.props.proveedores)
         .then(resultado=>{
             this.setState({
                 proveedores:resultado.data
             })
         })
-        .catch(error=>console.log(error));
+        .catch(error=>{
+            borrarToken();
+            this.props.history.push('/');
+        })
     }
     handleChange=(event)=>{
       
+    }
+    componentDidMount(){
+        if(!this.props.token){
+            this.props.history.push('/login')
+        }
     }
     handleChangeFile=(event)=>{
         const file=event.target.files[0];
@@ -153,7 +165,8 @@ const mapStateToProps=state=>{
     return {
         categorias:state.buscarCategorias,
         proveedores:state.buscarProveedores,
-        registrarProducto: state.registrarProducto
+        registrarProducto: state.registrarProducto,
+        token: state.token
     }
 }
 
