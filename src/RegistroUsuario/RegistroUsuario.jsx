@@ -29,10 +29,14 @@ class RegistroUsuario extends Component{
     }
     handleSubmit=(event)=>{
         event.preventDefault();
-
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
         console.log(this.state);
         if(this.state.password===event.target.password2.value){
-            axios.post(this.props.registrarUsuario, this.state)
+            axios.post(this.props.registrarUsuario, this.state, config)
             .then(resultado=>{
                 alert('Usuario registrado');
             })

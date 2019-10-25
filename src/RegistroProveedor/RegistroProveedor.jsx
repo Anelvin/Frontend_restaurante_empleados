@@ -28,7 +28,12 @@ class RegistroProveedor extends Component{
 
     handleSubmit=(event)=>{
         event.preventDefault();
-        Axios.post(this.props.registrarProveedor,this.state)
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
+        Axios.post(this.props.registrarProveedor, this.state, config)
         .then(resultado=>{
             this.props.history.push('/proveedor');
         })

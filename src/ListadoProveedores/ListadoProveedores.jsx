@@ -16,10 +16,15 @@ class ListadoProveedores extends Component{
     }
 
     componentDidMount(){
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
         if(!this.props.token){
             this.props.history.push('/login')
         }else{
-            Axios.get(this.props.proveedores)
+            Axios.get(this.props.proveedores, config)
             .then(resultado=>{
                 this.setState({
                     proveedores:resultado.data

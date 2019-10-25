@@ -16,10 +16,15 @@ class ListadoProducto extends Component{
     }
 
     componentDidMount(){
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
         if(!this.props.token){
             this.props.history.push('/login');
         }else{
-            Axios.get(this.props.productos)
+            Axios.get(this.props.productos, config)
             .then(resultado=>{
                 this.setState({
                     productos:resultado.data

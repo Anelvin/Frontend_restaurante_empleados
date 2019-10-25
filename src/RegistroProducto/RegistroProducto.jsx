@@ -31,7 +31,15 @@ class RegistroProducto extends Component{
     }
 
     componentDidMount(){
-        Axios.get(this.props.categorias)
+        if(!this.props.token){
+            this.props.history.push('/login')
+        }
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
+        Axios.get(this.props.categorias, config)
         .then(resultado=>{
             this.setState({
                 categorias:resultado.data
@@ -41,7 +49,7 @@ class RegistroProducto extends Component{
             borrarToken();
             this.props.history.push('/');
         })
-        Axios.get(this.props.proveedores)
+        Axios.get(this.props.proveedores, config)
         .then(resultado=>{
             this.setState({
                 proveedores:resultado.data
@@ -54,11 +62,6 @@ class RegistroProducto extends Component{
     }
     handleChange=(event)=>{
       
-    }
-    componentDidMount(){
-        if(!this.props.token){
-            this.props.history.push('/login')
-        }
     }
     handleChangeFile=(event)=>{
         const file=event.target.files[0];
@@ -82,6 +85,11 @@ class RegistroProducto extends Component{
     }
     handleSubmit=(event)=>{
         event.preventDefault();
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
         let datos={
             nombre:event.target.nombre.value,
             categoria:event.target.categoria.value,
@@ -90,7 +98,7 @@ class RegistroProducto extends Component{
             imagenURL:event.target.imagen.files[0].name,
             proveedor:event.target.proveedor.value
         }
-        Axios.post(this.props.registrarProducto,datos)
+        Axios.post(this.props.registrarProducto, datos, config)
         .then(resultado=>{
             this.props.history.push('/producto');
         })

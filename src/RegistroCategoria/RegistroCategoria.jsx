@@ -28,7 +28,12 @@ class RegistroCategoria extends Component{
     }
     handleSubmit=(event)=>{
         event.preventDefault();
-        axios.post(this.props.RegistrarCategoria,this.state)
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
+        axios.post(this.props.RegistrarCategoria, this.state, config)
         .then(resultado=>{
             this.props.history.push('categoria');
         })

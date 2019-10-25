@@ -4,7 +4,7 @@ import './ListadoCategorias.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { borrarToken } from '../store/action'
+import { borrarToken } from '../store/action';
 
 class ListadoCategorias extends Component{
 
@@ -16,10 +16,15 @@ class ListadoCategorias extends Component{
     }
 
     componentDidMount(){
+        let config={
+            headers:{
+                'Autorization': this.props.token
+            }
+        }
         if(!this.props.token){
             this.props.history.push('/login')
         }else{
-            Axios.get(this.props.buscarCategorias)
+            Axios.get(this.props.buscarCategorias,config)
             .then(resultado=>{
                 this.setState({
                     categorias:resultado.data
